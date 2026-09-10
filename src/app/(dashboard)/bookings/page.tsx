@@ -65,7 +65,6 @@ export default function BookingsPage() {
   );
 
   const cellBooked = (roomId: string, dayIso: string) => {
-    const next = format(addDays(parseISO(dayIso), 1), "yyyy-MM-dd");
     return (bookings ?? []).find(
       (b) =>
         b.room_id === roomId &&

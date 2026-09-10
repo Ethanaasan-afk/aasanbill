@@ -26,7 +26,6 @@ export type HeatCell = { date: string; count: number };
 
 export function MonoVizGrid({
   wave,
-  billed,
   collected,
   unpaid,
   monthBills,
@@ -206,4 +205,4 @@ export function MonoVizGrid({
       </div>
     </div>
   );
-}
+} 
