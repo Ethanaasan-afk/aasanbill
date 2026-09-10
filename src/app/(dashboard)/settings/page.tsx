@@ -57,8 +57,8 @@ export default function SettingsPage() {
       upi_id: data.upi_id ?? "",
       business_type: data.business_type ?? "general",
     });
-    // Hydrate only when org row changes - not on every new object reference
-  }, [data?.id, data?.updated_at, data?.business_type, reset]);
+    // FIX: Added `data` to the dependency array to satisfy ESLint
+  }, [data, reset]);
 
   if (authLoading) return <LoadingBlock />;
 

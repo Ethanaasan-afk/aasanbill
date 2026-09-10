@@ -110,6 +110,16 @@ export default function SignupPage() {
     }
   };
 
+  // FIX: Moved useMemo hook ABOVE the early return so it always runs
+  const strength = useMemo(() => passwordStrengthChecks(password), [password]);
+  const strengthItems = [
+    { ok: strength.minLength, label: "8+ characters" },
+    { ok: strength.upper, label: "Uppercase letter" },
+    { ok: strength.lower, label: "Lowercase letter" },
+    { ok: strength.number, label: "Number" },
+    { ok: strength.symbol, label: "Symbol (! @ # $)" },
+  ];
+
   if (demo) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cloud text-sm text-slate">
@@ -120,14 +130,6 @@ export default function SignupPage() {
 
   const selectedDesc =
     BUSINESS_TYPE_OPTIONS.find((o) => o.value === businessType)?.description ?? "";
-  const strength = useMemo(() => passwordStrengthChecks(password), [password]);
-  const strengthItems = [
-    { ok: strength.minLength, label: "8+ characters" },
-    { ok: strength.upper, label: "Uppercase letter" },
-    { ok: strength.lower, label: "Lowercase letter" },
-    { ok: strength.number, label: "Number" },
-    { ok: strength.symbol, label: "Symbol (! @ # $)" },
-  ];
 
   return (
     <div className="relative flex min-h-dvh items-center justify-center overflow-x-hidden bg-cloud px-4 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))]">
