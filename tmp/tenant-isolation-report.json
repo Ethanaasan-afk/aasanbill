@@ -1,0 +1,145 @@
+{
+  "stamp": "mse73u9t",
+  "emailA": "iso-a-mse73u9t@example.com",
+  "emailB": "iso-b-mse73u9t@example.com",
+  "orgA": "e7e61a7a-a169-4feb-981e-103a3e7e6601",
+  "orgB": "e8c22185-aedc-4946-9d4f-ea7e881dbc42",
+  "productId": "1fe72fd4-57ae-4431-b516-de66e6ab05f3",
+  "customerId": "cd01ea0b-da5f-4caf-ab8c-b130094d04d4",
+  "invoiceId": "db7e5362-e2ff-4e9e-8ab8-25d3a9542b47",
+  "businessDataId": "15287c2b-4777-406d-82a1-a408de49c53a",
+  "results": [
+    {
+      "id": "3a",
+      "title": "Products list as B — any A rows?",
+      "verdict": "BLOCKED",
+      "detail": "B sees 0 product(s); none from A. error=none"
+    },
+    {
+      "id": "3a-id",
+      "title": "Direct product ID fetch as B",
+      "verdict": "BLOCKED",
+      "detail": "Empty/blocked. error=none"
+    },
+    {
+      "id": "3a-force-org",
+      "title": "Products .eq(organization_id, orgA) as B",
+      "verdict": "BLOCKED",
+      "detail": "Empty (RLS). error=none"
+    },
+    {
+      "id": "3b-supabase",
+      "title": "Invoice by ID via Supabase as B (app query path)",
+      "verdict": "BLOCKED",
+      "detail": "Empty/blocked. error= none"
+    },
+    {
+      "id": "3b-rest",
+      "title": "Invoice REST GET by ID with B JWT",
+      "verdict": "BLOCKED",
+      "detail": "HTTP 200 body=[]"
+    },
+    {
+      "id": "3b-url-anon",
+      "title": "Navigate /invoices/{A_id} without B session",
+      "verdict": "BLOCKED",
+      "detail": "HTTP 307 (expect redirect/login or empty invoice UI)"
+    },
+    {
+      "id": "3c-customers",
+      "title": "Customers list as B",
+      "verdict": "BLOCKED",
+      "detail": "count=0; err=none"
+    },
+    {
+      "id": "3c-org",
+      "title": "Fetch org A row as B",
+      "verdict": "BLOCKED",
+      "detail": "err=none"
+    },
+    {
+      "id": "3c-users",
+      "title": "Users table as B — see A users?",
+      "verdict": "BLOCKED",
+      "detail": "count=0; err=column users.email does not exist"
+    },
+    {
+      "id": "3c-items",
+      "title": "Invoice items for A's invoice as B",
+      "verdict": "BLOCKED",
+      "detail": "rows=0; err=none"
+    },
+    {
+      "id": "3d-bde",
+      "title": "business_data_entries list as B",
+      "verdict": "BLOCKED",
+      "detail": "count=0; seeded=true; err=none"
+    },
+    {
+      "id": "3d-bde-id",
+      "title": "business_data_entries by A id as B",
+      "verdict": "BLOCKED",
+      "detail": "err=none"
+    },
+    {
+      "id": "3d-pc",
+      "title": "product_costs as B",
+      "verdict": "SKIPPED",
+      "detail": "Could not find the table 'public.product_costs' in the schema cache"
+    },
+    {
+      "id": "3d-oe",
+      "title": "other_expenses as B",
+      "verdict": "SKIPPED",
+      "detail": "Could not find the table 'public.other_expenses' in the schema cache"
+    },
+    {
+      "id": "extra-update",
+      "title": "Update A's product as B",
+      "verdict": "BLOCKED",
+      "detail": "updated=0; err=none"
+    },
+    {
+      "id": "extra-insert-orgA",
+      "title": "Insert product with organization_id=orgA as B",
+      "verdict": "BLOCKED",
+      "detail": "inserted=0; err=new row violates row-level security policy for table \"products\""
+    },
+    {
+      "id": "extra-rpc",
+      "title": "create_invoice_atomic using A's customer/product as B",
+      "verdict": "BLOCKED",
+      "detail": "Rejected: Customer not found"
+    },
+    {
+      "id": "extra-stock",
+      "title": "Stock movements for A's product as B",
+      "verdict": "BLOCKED",
+      "detail": "rows=0; err=none"
+    },
+    {
+      "id": "extra-wh",
+      "title": "Warehouses for org A as B",
+      "verdict": "BLOCKED",
+      "detail": "rows=0; err=none"
+    },
+    {
+      "id": "extra-orgs-list",
+      "title": "Organizations list as B",
+      "verdict": "BLOCKED",
+      "detail": "B sees 1 org(s); err=none"
+    },
+    {
+      "id": "3c-users-fixed",
+      "title": "Users table as B (no email col)",
+      "verdict": "BLOCKED",
+      "detail": "count=1; err=none"
+    },
+    {
+      "id": "3b-list",
+      "title": "Invoices list as B",
+      "verdict": "BLOCKED",
+      "detail": "count=0; err=none"
+    }
+  ]
+}

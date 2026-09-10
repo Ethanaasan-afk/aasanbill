@@ -1,0 +1,59 @@
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getRazorpay } from "@/lib/billing/razorpay";
+import { NextResponse } from "next/server";
+
+export async function POST() {
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role, organization_id")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile || profile.role !== "admin") {
+      return NextResponse.json({ error: "Admin only" }, { status: 403 });
+    }
+    if (!profile.organization_id) {
+      return NextResponse.json({ error: "No organization linked" }, { status: 400 });
+    }
+
+    const admin = createAdminClient();
+    const { data: org, error: orgErr } = await admin
+      .from("organizations")
+      .select("id, razorpay_subscription_id")
+      .eq("id", profile.organization_id)
+      .single();
+    if (orgErr || !org?.razorpay_subscription_id) {
+      return NextResponse.json(
+        { error: "No active Razorpay subscription on this organization" },
+        { status: 400 }
+      );
+    }
+
+    const razorpay = getRazorpay();
+    // cancel_at_cycle_end = true → access until period end
+    await razorpay.subscriptions.cancel(org.razorpay_subscription_id, true);
+
+    await admin
+      .from("organizations")
+      .update({
+        cancel_at_period_end: true,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", org.id);
+
+    return NextResponse.json({ ok: true, cancel_at_period_end: true });
+  } catch (e) {
+    console.error("[billing/cancel]", e);
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+  }
+}

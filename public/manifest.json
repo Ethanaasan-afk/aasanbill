@@ -1,0 +1,25 @@
+{
+  "name": "AasanBill",
+  "short_name": "AasanBill",
+  "description": "Bill banao, tension bhagao — GST invoices, inventory, and customers.",
+  "start_url": "/login",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#1d4ed8",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
