@@ -146,13 +146,11 @@ export function useUpdateCompanySettings() {
           writeLocalBusinessType(id, normalizeBusinessType(rest.business_type));
           notifyBusinessTypeLocalChange();
         }
-        const wantedSignature = rest.signature_url !== undefined;
+       const wantedSignature = rest.signature_url !== undefined;
         
-        // FIX: Replaced destructuring with direct deletion to prevent unused variable errors
         const safePatch = { ...patch } as Record<string, unknown>;
         delete safePatch.business_type;
         delete safePatch.signature_url;
-
         const retry = await supabase
           .from("organizations")
           .update(safePatch)
