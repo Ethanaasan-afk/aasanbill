@@ -115,6 +115,7 @@ export function useProductMutations() {
             ? null
             : Number(payload.manufacturing_cost),
       } as Record<string, unknown>);
+      
       if (cleaned.id) {
         const id = String(cleaned.id);
         const rest = { ...cleaned };
@@ -128,22 +129,23 @@ export function useProductMutations() {
           .eq("id", id)
           .select()
           .single();
+        
         if (error && /imei_serial|batch_number|is_service|metal_type|purity|huid|gross_weight|net_weight|making_charge|stone_value|wastage_percent|schema cache|Could not find the .* column/i.test(error.message)) {
-          const {
-            imei_serial: _i,
-            batch_number: _b,
-            is_service: _s,
-            metal_type: _m,
-            purity: _p,
-            huid_number: _h,
-            gross_weight: _g,
-            net_weight: _n,
-            making_charge_type: _mt,
-            making_charge_value: _mv,
-            stone_value: _sv,
-            wastage_percent: _w,
-            ...withoutExtras
-          } = rest as typeof rest & Record<string, unknown>;
+          // FIX: Removed unused destructuring variables and used delete instead
+          const withoutExtras = { ...rest } as Record<string, unknown>;
+          delete withoutExtras.imei_serial;
+          delete withoutExtras.batch_number;
+          delete withoutExtras.is_service;
+          delete withoutExtras.metal_type;
+          delete withoutExtras.purity;
+          delete withoutExtras.huid_number;
+          delete withoutExtras.gross_weight;
+          delete withoutExtras.net_weight;
+          delete withoutExtras.making_charge_type;
+          delete withoutExtras.making_charge_value;
+          delete withoutExtras.stone_value;
+          delete withoutExtras.wastage_percent;
+
           const retry = await supabase
             .from("products")
             .update({ ...withoutExtras, updated_at: new Date().toISOString() })
@@ -156,6 +158,7 @@ export function useProductMutations() {
         if (error) throw error;
         return data;
       }
+      
       const rest = { ...cleaned };
       delete rest.id;
       delete rest.current_stock;
@@ -166,22 +169,23 @@ export function useProductMutations() {
         .insert({ ...rest, organization_id: orgId })
         .select()
         .single();
+        
       if (error && /imei_serial|batch_number|is_service|metal_type|purity|huid|gross_weight|net_weight|making_charge|stone_value|wastage_percent|schema cache|Could not find the .* column/i.test(error.message)) {
-        const {
-          imei_serial: _i,
-          batch_number: _b,
-          is_service: _s,
-          metal_type: _m,
-          purity: _p,
-          huid_number: _h,
-          gross_weight: _g,
-          net_weight: _n,
-          making_charge_type: _mt,
-          making_charge_value: _mv,
-          stone_value: _sv,
-          wastage_percent: _w,
-          ...withoutExtras
-        } = rest as typeof rest & Record<string, unknown>;
+        // FIX: Removed unused destructuring variables and used delete instead
+        const withoutExtras = { ...rest } as Record<string, unknown>;
+        delete withoutExtras.imei_serial;
+        delete withoutExtras.batch_number;
+        delete withoutExtras.is_service;
+        delete withoutExtras.metal_type;
+        delete withoutExtras.purity;
+        delete withoutExtras.huid_number;
+        delete withoutExtras.gross_weight;
+        delete withoutExtras.net_weight;
+        delete withoutExtras.making_charge_type;
+        delete withoutExtras.making_charge_value;
+        delete withoutExtras.stone_value;
+        delete withoutExtras.wastage_percent;
+
         const retry = await supabase
           .from("products")
           .insert({ ...withoutExtras, organization_id: orgId })
