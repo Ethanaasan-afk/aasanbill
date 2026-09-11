@@ -913,6 +913,7 @@ export const demoDb = {
     if (!customer) throw new Error("Customer not found");
 
     for (const item of payload.items) {
+      if (!item.product_id) continue;
       const product = s.products.find((p) => p.id === item.product_id);
       if (product?.is_service) continue;
       const stock = s.stock[item.product_id] ?? 0;
@@ -991,6 +992,7 @@ export const demoDb = {
     s.invoices.unshift(invoice);
 
     for (const item of payload.items) {
+      if (!item.product_id) continue;
       const product = s.products.find((p) => p.id === item.product_id);
       if (product?.is_service) continue;
       s.stock[item.product_id] = (s.stock[item.product_id] ?? 0) - item.quantity;
@@ -1030,6 +1032,7 @@ export const demoDb = {
 
     // Reverse old invoice stock movements (outs + any void restores)
     for (const item of inv.items ?? []) {
+      if (!item.product_id) continue;
       const product = s.products.find((p) => p.id === item.product_id);
       if (product?.is_service) continue;
       s.stock[item.product_id] = (s.stock[item.product_id] ?? 0) + item.quantity;
@@ -1047,6 +1050,7 @@ export const demoDb = {
     });
 
     for (const item of payload.items) {
+      if (!item.product_id) continue;
       const product = s.products.find((p) => p.id === item.product_id);
       if (product?.is_service) continue;
       const stock = s.stock[item.product_id] ?? 0;
@@ -1112,6 +1116,7 @@ export const demoDb = {
     }
 
     for (const item of payload.items) {
+      if (!item.product_id) continue;
       const product = s.products.find((p) => p.id === item.product_id);
       if (product?.is_service) continue;
       s.stock[item.product_id] = (s.stock[item.product_id] ?? 0) - item.quantity;
@@ -1169,6 +1174,7 @@ export const demoDb = {
 
     if (input.status === "cancelled" && input.restoreStock) {
       for (const item of inv.items ?? []) {
+        if (!item.product_id) continue;
         s.stock[item.product_id] = (s.stock[item.product_id] ?? 0) + item.quantity;
         s.movements.unshift({
           id: id(),
@@ -1360,6 +1366,7 @@ export const demoDb = {
     s.purchases.unshift(purchase);
 
     for (const item of payload.items) {
+      if (!item.product_id) continue;
       s.stock[item.product_id] = (s.stock[item.product_id] ?? 0) + item.quantity;
       s.movements.unshift({
         id: id(),
@@ -1485,6 +1492,7 @@ export const demoDb = {
     s.creditNotes.unshift(cn);
 
     for (const item of payload.items) {
+      if (!item.product_id) continue;
       s.stock[item.product_id] = (s.stock[item.product_id] ?? 0) + item.quantity;
       s.movements.unshift({
         id: id(),
